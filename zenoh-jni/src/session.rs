@@ -670,8 +670,7 @@ fn on_query(mut env: JNIEnv, query: Query, callback_global_ref: &GlobalRef) -> Z
             )
         })?;
 
-    let (payload, encoding_id, encoding_schema) = if let Some(payload) = query.payload() {
-        let encoding = query.encoding().unwrap(); //If there is payload, there is encoding.
+    let (payload, encoding_id, encoding_schema) = if let (Some(payload), Some(encoding)) = (query.payload(), query.encoding()) {
         let encoding_id = encoding.id() as jint;
         let encoding_schema = encoding
             .schema()
