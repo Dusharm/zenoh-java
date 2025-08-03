@@ -50,7 +50,8 @@ pub unsafe extern "C" fn Java_io_zenoh_jni_JNIScout_00024Companion_scoutViaJNI(
         let java_vm = Arc::new(get_java_vm(&mut env)?);
         let on_close_global_ref: GlobalRef = get_callback_global_ref(&mut env, on_close)?;
         let on_close = load_on_close(&java_vm, on_close_global_ref);
-        let whatAmIMatcher: WhatAmIMatcher = (whatAmI as u8).try_into().unwrap(); // The validity of the operation is guaranteed on the kotlin layer.
+        let whatAmIMatcher = WhatAmIMatcher::try_from(whatAmI as u8)
+        .map_err(|_| zerror!("Invalid WhatAmI bitmask from JNI: {whatAmI}"))?;
         let config = if config_ptr.is_null() {
             Config::default()
         } else {

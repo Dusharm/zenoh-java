@@ -89,7 +89,7 @@ pub(crate) unsafe extern "C" fn Java_io_zenoh_jni_JNIQuery_replySuccessViaJNI(
             reply_builder = reply_builder.attachment(decode_byte_array(&env, attachment)?);
         }
         reply_builder = reply_builder.express(qos_express != 0);
-        reply_builder = reply_builder.priority(Priority::try_from(qos_priority as u8).unwrap()); // The numeric value is always within range.
+        reply_builder = reply_builder.priority(Priority::try_from(qos_priority as u8).unwrap_or(Priority::DEFAULT));
         reply_builder = if qos_congestion_control != 0 {
             reply_builder.congestion_control(CongestionControl::Block)
         } else {
@@ -188,7 +188,7 @@ pub(crate) unsafe extern "C" fn Java_io_zenoh_jni_JNIQuery_replyDeleteViaJNI(
             reply_builder = reply_builder.attachment(decode_byte_array(&env, attachment)?);
         }
         reply_builder = reply_builder.express(qos_express != 0);
-        reply_builder = reply_builder.priority(Priority::try_from(qos_priority as u8).unwrap()); // The numeric value is always within range.
+        reply_builder = reply_builder.priority(Priority::try_from(qos_priority as u8).unwrap_or(Priority::DEFAULT)); // The numeric value is always within range.
         reply_builder = if qos_congestion_control != 0 {
             reply_builder.congestion_control(CongestionControl::Block)
         } else {
